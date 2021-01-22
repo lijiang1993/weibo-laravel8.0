@@ -12,7 +12,12 @@ class SessionsController extends Controller
         return view('sessions.create');
     }
 
-    //认证用户信息
+    /**
+     * 认证用户信息
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|void
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function store(Request $request)
     {
         $credentails = $this->validate($request, [
@@ -30,4 +35,13 @@ class SessionsController extends Controller
 
         return;
     }
+
+    public function logout()
+    {
+        //
+        Auth::logout();
+        session()->flash('success','您已成功退出');
+        return redirect('login');
+    }
+
 }

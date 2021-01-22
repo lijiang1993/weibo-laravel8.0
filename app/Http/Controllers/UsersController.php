@@ -23,7 +23,7 @@ class UsersController extends Controller
         //验证用户提交信息
         $this->validate($request, [
             'name' => 'required|unique:users|max:50',
-            'email' => 'required|unique:users|max:255',
+            'email' => 'required|unique:users|email|max:255',
             'password' => 'required|confirmed|min:6'
         ]);
 

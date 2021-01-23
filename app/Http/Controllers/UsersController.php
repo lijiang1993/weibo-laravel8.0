@@ -14,11 +14,16 @@ class UsersController extends Controller
     {
         //未登录用户访问权限
         $this->middleware('auth', [
-            'except' => ['show', 'create', 'store', 'index','confirmEmail']
+            'except' => ['show', 'create', 'store', 'index', 'confirmEmail']
         ]);
 
         $this->middleware('guest', [
             'only' => ['create'],
+        ]);
+
+        //一个小时注册10次
+        $this->middleware('throttle:10,60', [
+            'only' => ['store'],
         ]);
     }
 
@@ -43,7 +48,6 @@ class UsersController extends Controller
     {
         return view('users.show', compact('user'));
     }
-
 
 
     public function store(Request $request)
@@ -147,17 +151,16 @@ class UsersController extends Controller
      */
     public function confirmEmail($token)
     {
-        $user = User::where('activation_token',$token)->firstorFail();
+        $user = User::where('activation_token', $token)->firstorFail();
 
         $user->activated = true;
         $user->activation_token = null;
         $user->save();
 
         Auth::login($user);
-        session()->flash('success','激活成功');
-        return redirect()->route('users.show',[$user]);
+        session()->flash('success', '激活成功');
+        return redirect()->route('users.show', [$user]);
     }
-
 
 
 }

@@ -16,10 +16,12 @@ class StatusesController extends Controller
 
     public function store(Request $request)
     {
+        //验证数据
         $this->validate($request,[
             'content'=>'required|max:200',
         ]);
 
+        //当前用户发布微博
         Auth::user()->statuses()->create([
             'content'=>$request['content'],
         ]);
